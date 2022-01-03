@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+	<launch>
+	<arg name="ns"	default="jackal0"/>
+		<node pkg="simple_navigation_goals" type="move_base_seq.py" name="move_base_seq" ns="$(arg ns)" output="screen">
+			<rosparam param="p_seq">[32.25,4.125,0, 26.35,-19.125,0, 26.35,-3.625,0]</rosparam>
+			<rosparam param="yea_seq">[0, 0, 0]</rosparam>
+		</node>
+	</launch>

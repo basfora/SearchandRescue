@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="ns"    default="jackal0"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" ns="$(arg ns)" output="screen">
+      <rosparam file="$(find multi_jackal_nav)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find multi_jackal_nav)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find multi_jackal_nav)/params/odom_nav_params/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find multi_jackal_nav)/params/odom_nav_params/local_costmap_params.yaml"  command="load" />
+      <rosparam file="$(find multi_jackal_nav)/params/base_local_planner_params.yaml" command="load" />
+      <rosparam file="$(find multi_jackal_nav)/params/move_base_params.yaml" command="load" />
+      <param name="base_global_planner" type="string" value="navfn/NavfnROS" /> <!--value="navfn/NavfnROS" /> -->
+      <param name="base_local_planner"                value="base_local_planner/TrajectoryPlannerROS"/>
+      <param name="global_costmap/global_frame"       value="$(arg ns)/odom"/>-->
+      <param name="global_costmap/robot_base_frame"   value="$(arg ns)/base_link"/>
+      <param name="local_costmap/global_frame"        value="$(arg ns)/odom"/>
+      <param name="local_costmap/robot_base_frame"    value="$(arg ns)/base_link"/>
+      <remap from="odom"    to="odometry/filtered" />
+      <remap from="cmd_vel" to="jackal_velocity_controller/cmd_vel"/>
+      <remap from="map" to="/map"/>
+    </node>
+
+</launch>

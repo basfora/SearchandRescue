@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="ns0"        default="jackal0"/>
+  <arg name="ns1"        default="jackal1"/>
+  <arg name="ns2"        default="drone"/>
+  <arg name="config0"    default="bumblebee_laser"/>
+  <arg name="config0_id" default="0"/>
+  <arg name="config1"    default="bumblebee_laser"/>
+  <arg name="config1_id" default="1"/>
+  <arg name="world"     default="filled_model.world"/>
+  <arg name="gui"       default="true"/>
+  <arg name="rviz"      default="true"/>
+  <arg name="amcl"       default="true"/>
+  <arg name="belief"	default="0"/>
+  <arg name="folder"	default="/home"/>
+  <arg name="map_file" default="$(find multi_jackal_nav)/maps/filled5.yaml"/>
+   
+  <!-- Start Gazebo with wg world running in (max) realtime -->
+  <!-- Start Gazebo with an empty world. -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui"          value="$(arg gui)"/>	
+    <arg name="world_name"   value="$(find multi_jackal_tutorials)/worlds/$(arg world)"/>
+  </include>
+
+  <group if="$(arg amcl)">
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" output="screen"/>
+  </group>
+  
+  <!-- Spawn the robot. -->
+  <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
+    <arg name="ns"            value="$(arg ns0)"/>
+    <arg name="amcl"          value="$(arg amcl)"/>
+    <arg name="config"        value="$(arg config0)"/>
+    <arg name="config_id"     value="$(arg config0_id)"/>
+    <arg name="use_move_base" value="true"/>
+    <arg name="x"             value="18"/>
+    <arg name="y"             value="-20"/>
+    <arg name="yaw"           value="0"/>
+  </include>
+  <include file="$(find multi_jackal_base)/launch/jackal_base.launch">
+    <arg name="ns"            value="$(arg ns1)"/>
+    <arg name="amcl"          value="$(arg amcl)"/>
+    <arg name="config"        value="$(arg config1)"/>
+    <arg name="config_id"     value="$(arg config1_id)"/>
+    <arg name="use_move_base" value="true"/>
+    <arg name="x"             value="22"/>
+    <arg name="y"             value="-22"/>
+    <arg name="yaw"           value="0"/>
+  </include>
+   
+  <!-- Spawn simulated quadrotor uav -->
+  <group ns="$(arg ns2)">
+    <include file="$(find quadrotor_navigation)/launch/spawn_quadrotor.launch" >
+      <arg name="model" value="$(find hector_quadrotor_description)/urdf/quadrotor_hokuyo_utm30lx.gazebo.xacro"/>
+      <arg name="name" value="$(arg ns2)" />
+      <arg name="tf_prefix" value="$(arg ns2)" />
+      <arg name="x" value="19"/> 
+      <arg name="y" value="-21"/> 
+    </include>
+    <include file="$(find takeoff_land)/launch/takeoff_land.launch">
+    </include>
+  </group>
+  <include file="$(find quadrotor_navigation)/launch/drone_amcl.launch">
+      <arg name="ns" value="$(arg ns2)" />
+      <arg name="x" value="19"/> 
+      <arg name="y" value="-21"/> 
+  </include>
+
+  <!-- View in RVIZ. -->
+  <group if="$(arg rviz)">
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find multi_jackal_tutorials)/rviz/jackal_drone.rviz" >
+      <remap from="/move_base_simple/goal" to="/$(arg ns2)/move_base_simple/goal"/>
+    </node>
+  </group>
+
+  <node pkg="rostopic" type="rostopic" name="takeoff" args="pub /drone/takeoff std_msgs/Empty '{}'" output="screen"/>
+
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+    args="10 multi_jackal_tutorials sim.launch folder:=$(arg folder) belief:=$(arg belief)"
+    name="send_goals" output="screen" /> 
+  
+   
+</launch>
