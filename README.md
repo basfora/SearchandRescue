@@ -1,9 +1,27 @@
 # Search and Rescue Simulator
 
+[**Overview**](#overview) | [**Prerequisites**](#prerequisites) | [**Installing**](#installing) | [**Running**](#running-the-simulation) 
+| [**Data**](#simulation-data) | [**Repo Content**](#repository-content) | [**Schematic**](#launch-file-schematic) | [**Authors**](#authors)
+
+
 ## Overview
-Our goal for this project is to design a simulator on Gazebo for search-and-rescue missions. We want to be able to test different robots and path planning algorithms in a realistic disaster scenario. For this project, we are using Gazebo 7 with ROS-Kinetic and the Jackal Robot. The first scenario chosen is the School Scenario (SS-1). <br />
-Project page: https://confluence.cornell.edu/display/asl/Search+and+Rescue+Simulator<br />
-Lab page: http://cornell-asl.org/
+Our goal for this project was to design a simulator on Gazebo for search-and-rescue missions. We want to be able to test different robots and path planning algorithms in a realistic disaster scenario. For this project, we are using Gazebo 7 with ROS-Kinetic and the Jackal Robot. The first scenario chosen is the School Scenario (SS-1). <br />
+
+You are welcome to use our material. If you do so, please cite our [paper](https://ieeexplore.ieee.org/abstract/document/9366368?casa_token=hrXCiSLKUMYAAAAA:djMlZYwuKUHiNHB5i-aWCQWZy98jSx7v5Tc1DCwKmlK5FFEwfsQI1TVH1OQ3UsLVYBVFbpwaJA):
+
+```
+@article{shree2021exploiting,
+  title={Exploiting Natural Language for Efficient Risk-Aware Multi-Robot SaR Planning},
+  author={Shree, Vikram and Asfora, Beatriz and Zheng, Rachel and Hong, Samantha and Banfi, Jacopo and Campbell, Mark},
+  journal={IEEE Robotics and Automation Letters},
+  volume={6},
+  number={2},
+  pages={3152--3159},
+  year={2021},
+  publisher={IEEE}
+}
+```
+Autonomous Systems [Lab page](http://cornell-asl.org/) | [project page](https://confluence.cornell.edu/display/asl/Search+and+Rescue+Simulator)
 
 
 ### Prerequisites
@@ -114,6 +132,7 @@ Contains furnished and unfurnished .world files of the school environment
 
 ## Simulation Errors
 There may be an issue with launching Gazebo or RVIZ when trying to use the simulator. If that is the case, CTRL + C to shut down the simulator, source the setup.bash script in your local catkin_ws/devel directory, and then relaunch the simulator. An example of this taken on video is in the img folder of this repository. 
+
 
 ## Built With
 
